@@ -1,0 +1,30 @@
+<div class="container template" id="orders-template" data-tab="orders">
+    <style>
+        .order, .items {
+            width: 45%;
+            height:100%;
+            display:inline-block;
+            background-color: blue;
+        }
+        .categories {
+            height: 10%;
+            max-height: 15vh;
+
+        }
+    </style>
+
+    <div class="order">
+        <ul>
+            <li>hello</li>
+        </ul>
+    </div>
+
+    <div class="items">
+        <ul class="categories"><li>first list</li></ul>
+        <ul class="itemGrid"><li>Second List</li></ul>
+    </div>
+
+    <script>
+        window.api.send('getData', 'categories', '1erfdwef')
+    </script>
+</div>

@@ -7,11 +7,12 @@ const {
 // the ipcRenderer without exposing the entire object
 contextBridge.exposeInMainWorld(
     "api", {
-        send: (channel, data) => {
+        send: (channel, ...data) => {
             // whitelist channels
-            let validChannels = ["loadPages", "test1"];
+            let validChannels = ["loadPages", "test1", "getData"];
             if (validChannels.includes(channel)) {
-                ipcRenderer.send(channel, data);
+                //console.log(data);
+                ipcRenderer.send(channel, ...data);
             }
         },
         receive: (channel, func) => {

@@ -33,7 +33,7 @@ const createWindow = () => {
 };
 
 
-
+//THIS DOESNT QUITE WORK YET
 global.query = function (str = '', callbackfunc = null) {
     let connection = mysql.createConnection({
         host: process.env.HOST,
@@ -51,7 +51,7 @@ global.query = function (str = '', callbackfunc = null) {
 
     connection.end();
 };
-global.query("INSERT INTO testtable() VALUES ()");
+
 ipcMain.on("loadPages", (event, args) => {
     //let responseObj = "hello";
 
