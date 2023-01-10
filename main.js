@@ -79,7 +79,7 @@ app.whenReady().then(() => {
         if (BrowserWindow.getAllWindows().length === 0) createWindow()
     })
 
-    ipcMain.handle('', handleFileOpen)
+     //ipcMain.handle('', handleFileOpen)
 });
 
 app.on('window-all-closed', () => {
