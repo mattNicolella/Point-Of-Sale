@@ -12,13 +12,16 @@
     <title>Hello World!</title>
 
     <script>
-        window.api.receive("fromMain", (data) => {
-            console.log(`Received ${data} from main process`);
+        window.api.receive("loadCoimplete", () => {
+            $('#side-bar-menu').eq(0).click();
+        });
+        window.api.receive("sendPages", (data) => {
+            //console.log(`Received ${data} from main process`);
 
             $('tmp').html(data);
 
             const $container = $('.container');
-            console.debug($container.data('tab'));
+            //console.debug($container.data('tab'));
 
             $('#side-bar-menu').append('<li>'+$container.data('tab')+'</li>');
             $('#main-content').append($('tmp').html());
@@ -32,7 +35,8 @@
             $('.container[data-tab=\''+$(this).addClass('menuActive').text()+'\']').show();
         });
         
-        window.api.send("toMain", "some data");
+        window.api.send("loadPages", "data");
+        window.api.send("test1", "data");
     </script>
 </head>
 

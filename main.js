@@ -3,6 +3,8 @@ const {
     BrowserWindow,
     ipcMain
 } = require("electron");
+require('dotenv').config()
+const mysql = require('mysql');
 
 let win;
 const path = require("path");
@@ -18,6 +20,7 @@ const createWindow = () => {
     win = new BrowserWindow({
         width: width / 2,
         height: height / 2,
+        fullscreen: true,
         autoHideMenuBar: true,
         webPreferences: {
             preload: path.join(__dirname, './preload.js')
@@ -29,18 +32,42 @@ const createWindow = () => {
     //win.loadURL("https://google.com");
 };
 
-ipcMain.on("toMain", (event, args) => {
+
+
+global.query = function (str = '', callbackfunc = null) {
+    let connection = mysql.createConnection({
+        host: process.env.HOST,
+        user: process.env.USER,
+        password: process.env.PASSWD,
+        database: process.env.DATABASE
+    });
+
+    connection.connect();
+    connection.query(str, function (error, results, fields) {
+        if (error) throw error;
+        if (callbackfunc != null)
+            callbackfunc(results);
+    });
+
+    connection.end();
+};
+global.query("INSERT INTO testtable() VALUES ()");
+ipcMain.on("loadPages", (event, args) => {
     //let responseObj = "hello";
 
-    fs.readdirSync(path.join(__dirname,'pages/'), {withFileTypes: true}).forEach(file => {
-        console.log(file.name.split('.')[1]);
+    const files = fs.readdirSync(path.join(__dirname,'pages/'), {withFileTypes: true});
+    
+    for(const file of files) {
+        console.log(file);
 
         if(file.name.split('.')[1] == 'html') {
             //console.log('upload');
             const data = fs.readFileSync(path.join(__dirname, 'pages/'+file.name),{encoding:'utf8', flag:'r'});
-            win.webContents.send("fromMain", data);
+            win.webContents.send("sendPages", data);
         }
-    })
+    };
+
+    win.webContents.send('loadComplete');
     //fs.readFile("path/to/file", (error, data) => {
     //});
 });
@@ -56,3 +83,10 @@ app.whenReady().then(() => {
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit()
 });
+
+const functions = fs.readdirSync('./scripts').filter(file => file.endsWith('.js'));
+
+for (const func of functions) {
+    const item = require(`./scripts/${func}`);
+    ipcMain.on(item.name, (...args) => item.execute(...args));
+}

@@ -20,6 +20,8 @@
     "electron": "^22.0.0"
   },
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.0"
+    "dotenv": "^16.0.3",
+    "electron-squirrel-startup": "^1.0.0",
+    "mysql": "^2.18.1"
   }
 }
