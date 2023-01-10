@@ -9,7 +9,7 @@ contextBridge.exposeInMainWorld(
     "api", {
         send: (channel, ...data) => {
             // whitelist channels
-            let validChannels = ["loadPages", "test1", "getData"];
+            let validChannels = ["loadPages", "test1"];
             if (validChannels.includes(channel)) {
                 //console.log(data);
                 ipcRenderer.send(channel, ...data);
@@ -20,6 +20,17 @@ contextBridge.exposeInMainWorld(
             if (validChannels.includes(channel)) {
                 // Deliberately strip event as it includes `sender` 
                 ipcRenderer.on(channel, (event, ...args) => func(...args));
+            }
+        },
+        call: (channel, ...data) => {
+            let validChannels = ["getInfo"];
+            if (validChannels.includes(channel)) {
+                //console.log(data);
+                output = ipcRenderer.invoke(channel, ...data);
+
+                console.log(output);
+
+                return output
             }
         }
     }

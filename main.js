@@ -78,6 +78,8 @@ app.whenReady().then(() => {
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) createWindow()
     })
+
+    ipcMain.handle('', handleFileOpen)
 });
 
 app.on('window-all-closed', () => {
@@ -88,5 +90,5 @@ const functions = fs.readdirSync('./scripts').filter(file => file.endsWith('.js'
 
 for (const func of functions) {
     const item = require(`./scripts/${func}`);
-    ipcMain.on(item.name, (...args) => item.execute(...args));
+    ipcMain.handle(item.name, (...args) => item.execute(...args));
 }

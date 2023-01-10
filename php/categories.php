@@ -5,14 +5,18 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 require_once("config.php");
-if (isset($argc)) {
+require_once("functions.php");
+/*if (isset($argc)) {
 	for ($i = 0; $i < $argc; $i++) {
 		echo "Argument #" . $i . " - " . $argv[$i] . "\n";
 	}
 }
 else {
 	echo "argc and argv disabled\n";
-}
+}*/
 
+$res = getQuery("SELECT * FROM categories", true);
 
-?>
+while(check($res) && $row = $res->fetch_assoc()) {?>
+	<li><a><?=$row['name']?></a></li>
+<?}?>

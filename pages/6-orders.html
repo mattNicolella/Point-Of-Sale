@@ -24,7 +24,15 @@
         <ul class="itemGrid"><li>Second List</li></ul>
     </div>
 
+    <div id="testdiv"></div>
+
     <script>
-        window.api.send('getData', 'categories', '1erfdwef')
+        async function test() {
+            let results = await window.api.call('getInfo', 'categories', '1erfdwef');
+            console.log(results);
+            $('#testdiv').html(results);
+        }
+
+        test();
     </script>
 </div>
