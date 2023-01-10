@@ -4,12 +4,19 @@
             width: 45%;
             height:100%;
             display:inline-block;
-            background-color: blue;
+            /*background-color: blue;*/
         }
         .categories {
             height: 10%;
             max-height: 15vh;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: 10px;
+            margin-bottom: 2%;
+        }
 
+        .categories > li {
+            background-color: red;
         }
     </style>
 
@@ -20,7 +27,7 @@
     </div>
 
     <div class="items">
-        <ul class="categories"><li>first list</li></ul>
+        <ul class="categories"></ul>
         <ul class="itemGrid"><li>Second List</li></ul>
     </div>
 
@@ -30,7 +37,7 @@
         async function test() {
             let results = await window.api.call('getInfo', 'categories', '1erfdwef');
             console.log(results);
-            $('#testdiv').html(results);
+            $('.categories').html(results);
         }
 
         test();
