@@ -18,5 +18,5 @@ else {
 $res = getQuery("SELECT * FROM categories", true);
 
 while(check($res) && $row = $res->fetch_assoc()) {?>
-	<li><a><?=$row['name']?></a></li>
+	<li><a onClick="showItems(<?=$row['idrec']?>);"><?=$row['name']?></a></li>
 <?}?>

@@ -23,14 +23,14 @@ contextBridge.exposeInMainWorld(
             }
         },
         call: (channel, ...data) => {
-            let validChannels = ["getInfo"];
+            let validChannels = ["getInfo", "addToOrder", "createOrder"];
             if (validChannels.includes(channel)) {
                 //console.log(data);
-                output = ipcRenderer.invoke(channel, ...data);
+                const output = ipcRenderer.invoke(channel, ...data);
 
-                console.log(output);
+                //console.log(output);
 
-                return output
+                return output;
             }
         }
     }

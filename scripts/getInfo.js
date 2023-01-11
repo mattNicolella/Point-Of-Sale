@@ -5,7 +5,7 @@ module.exports = {
     execute(payload, ...args) {
         //console.log('type:', args);
         const output = execSync(`php ./php/${args.shift()}.php `+args.join(" ")).toString();
-        console.log(output);
+        //console.log(output);
 
         return output;
     },

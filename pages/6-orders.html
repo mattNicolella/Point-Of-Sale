@@ -9,6 +9,9 @@
         .categories {
             height: 10%;
             max-height: 15vh;
+        }
+
+        .grided {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             grid-gap: 10px;
@@ -18,7 +21,18 @@
         .categories > li {
             background-color: red;
         }
+
+        .itemGrid li {
+            display: none;
+            border: 2px solid red;
+        }
     </style>
+
+    <input type="hidden" id="orderId" value="0">
+
+    <div class="orderS">
+        <h3 style="width: fit-content;">Order Status: </h3><a onClick="addOrder">+ Add Order</a>
+    </div>
 
     <div class="order">
         <ul>
@@ -27,19 +41,34 @@
     </div>
 
     <div class="items">
-        <ul class="categories"></ul>
-        <ul class="itemGrid"><li>Second List</li></ul>
+        <ul class="categories grided"></ul>
+        <ul class="itemGrid grided"><li>Second List</li></ul>
     </div>
 
     <div id="testdiv"></div>
 
     <script>
         async function test() {
-            let results = await window.api.call('getInfo', 'categories', '1erfdwef');
-            console.log(results);
-            $('.categories').html(results);
+            const cats = await window.api.call('getInfo', 'categories', '1erfdwef');
+            $('.categories').html(cats);
+
+            const items = await window.api.call('getInfo', 'items', '1erfdwef');
+            $('.itemGrid').html(items);
         }
 
         test();
+
+        function showItems(idcat) {
+            $('li', $('.itemGrid')).hide().length;
+            $('.cat'+idcat, '.itemGrid').show();
+        }
+
+        function addToOrder(idprod) {
+            window.api.call('addToOrder', idprod);
+        }
+
+        function addOrder() {
+            window.api.call('createOrder', '');
+        }
     </script>
 </div>

@@ -3,8 +3,8 @@ const {
     BrowserWindow,
     ipcMain
 } = require("electron");
-require('dotenv').config()
-const mysql = require('mysql');
+require('dotenv').config();
+const utils = require('./utils/functions.js');
 
 let win;
 const path = require("path");
@@ -32,25 +32,9 @@ const createWindow = () => {
     //win.loadURL("https://google.com");
 };
 
-
-//THIS DOESNT QUITE WORK YET
-global.query = function (str = '', callbackfunc = null) {
-    let connection = mysql.createConnection({
-        host: process.env.HOST,
-        user: process.env.USER,
-        password: process.env.PASSWD,
-        database: process.env.DATABASE
-    });
-
-    connection.connect();
-    connection.query(str, function (error, results, fields) {
-        if (error) throw error;
-        if (callbackfunc != null)
-            callbackfunc(results);
-    });
-
-    connection.end();
-};
+global.query = utils.query;
+global.triggerCloseDB = utils.debounce(() => utils.closeDB())
+  
 
 ipcMain.on("loadPages", (event, args) => {
     //let responseObj = "hello";

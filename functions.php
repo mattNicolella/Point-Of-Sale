@@ -12,7 +12,9 @@ function runQuery($str, $mysqliObj = false) {
 
     $mysqliObj->query($str);
 
-    echo mysqli_error($mysqliObj);
+    if(mysqli_error($mysqliObj)) {
+        echo $str.PHP_EOL.mysqli_error($mysqliObj).PHP_EOL.PHP_EOL;
+    }
 }
 /**
  * Runs A Get Query
