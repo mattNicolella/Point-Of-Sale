@@ -40,6 +40,10 @@
         function send(channel, ...args) {
             window.api.send(channel, ...args);
         }
+
+        async function invoke(channel, ...args) {
+            return await window.api.call(channel, ...args);
+        }
     </script>
 </head>
 

@@ -1,0 +1,54 @@
+<div class="container template" id="order history-template" data-tab="order history">
+    <h1>Order History</h1>
+
+    <div class="reporting-keys">
+        <label>Status: </label>
+        <select class="status" onChange="updateTable();">
+            <option value="0">Select</option>
+        </select>
+
+        <script>
+            invoke('getInfo', 'select_options', '1').then((data) => {
+                $('.status').html(data);
+            });
+        </script>
+    </div>
+
+    <div class="row">
+        <div class="orderList col-md-6">
+            <ul>
+
+            </ul>
+
+            <script>
+                invoke('getInfo', 'orderList', $('.status')[0].value).then((data) => {
+                    $('ul', '.orderList').html(data);
+                });
+
+                $(document).on('click', '.orderList ul li', function() {
+                    const orderId = $(this).data('order');
+                    invoke('getInfo', 'order', orderId).then((data) => {
+                    $('h4', '.preview').html(`Order: ${orderId}`);
+                    $('ul', '.preview').html(data);
+                });
+                })
+            </script>
+        </div>
+
+        <div class="preview col-md-6">
+            <h4></h4>
+            <ul>
+
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function updateTable() {
+            invoke('getInfo', 'orderList', $('.status')[0].value).then((data) => {
+                console.log('got the new order lsit for ',$('.status')[0].value)
+                $('ul', '.orderList').html(data);
+            });
+        }
+    </script>
+</div>
