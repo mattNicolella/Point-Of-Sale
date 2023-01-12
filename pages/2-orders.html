@@ -64,18 +64,25 @@
     </div>
 
     <script>
-        async function loadOrders() {
-            const cats = await window.api.call('getInfo', 'categories');
-            $('.categories').html(cats);
+        async function updateProducts() {
+            invoke('getInfo', 'categories').then((data) => {
+                $('.categories').html(data);
+            });
 
-            const items = await window.api.call('getInfo', 'items');
-            $('.itemGrid').html(items);
+            invoke('getInfo', 'items').then((data) => {
+                $('.itemGrid').html(data);
+            });
 
-            const openOrders = await window.api.call('getInfo', 'openOrders');
-            $('.openOrders').html('<option value="0">Open Orders</option>'+openOrders);
+            updateOpen();
         }
 
-        loadOrders();
+        updateProducts();
+
+        function updateOpen() {
+            invoke('getInfo', 'openOrders').then((data) => {
+                $('.openOrders').html('<option value="0">Open Orders</option>'+data);
+            });
+        }
 
         function showItems(idcat) {
             $('li', $('.itemGrid')).hide().length;
@@ -94,6 +101,7 @@
         window.api.receive("orderId", (orderId) => {
             console.log('order id');
             $('#orderId').val(orderId);
+            $('ul', '.order').html('');
             $('#orderTitle').html("Order Id: "+orderId);
         });
 
@@ -108,7 +116,10 @@
             $('ul', '.order').html(await window.api.call('getInfo', 'order', elem.value));
 
             $('#orderId').val(elem.value);
-            $('#orderTitle').html("Order Id: "+elem.value);
+            if(elem.value == 0)
+                $('#orderTitle').html("Order Id: +Add");
+            else
+                $('#orderTitle').html("Order Id: "+elem.value);
         }
     </script>
 </div>

@@ -1,6 +1,17 @@
 <div class="container template" id="order history-template" data-tab="order history">
     <h1>Order History</h1>
 
+    <style>
+        .orderList ul li:last-child {
+            border-bottom: 3px solid white;
+        }
+        .orderList ul li {
+            cursor: pointer;
+            border: 3px solid white;
+            border-bottom: 0;
+        }
+    </style>
+
     <div class="reporting-keys">
         <label>Status: </label>
         <select class="status" onChange="updateTable();">
@@ -30,16 +41,20 @@
                     invoke('getInfo', 'order', orderId).then((data) => {
                     $('h4', '.preview').html(`Order: ${orderId}`);
                     $('ul', '.preview').html(data);
+                    $('#oprId').val(orderId);
                 });
                 })
             </script>
         </div>
 
         <div class="preview col-md-6">
+            <input type="hidden" id="oprId" value="0">
             <h4></h4>
             <ul>
 
             </ul>
+
+            <button onClick="send('markComplete', $('#oprId').val());updateTable();">Mark Fulfilled</button>
         </div>
     </div>
 
@@ -48,6 +63,8 @@
             invoke('getInfo', 'orderList', $('.status')[0].value).then((data) => {
                 console.log('got the new order lsit for ',$('.status')[0].value)
                 $('ul', '.orderList').html(data);
+
+                updateOpen();
             });
         }
     </script>
