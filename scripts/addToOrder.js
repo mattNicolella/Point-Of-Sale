@@ -14,8 +14,9 @@ module.exports = {
                 data.insertId;
                 sendBackOrder(data.insertId);
 
+                const insertId = data.insertId;
                 query('INSERT INTO order_items(idproduct, idorder) VALUES ('+args[0]+', '+data.insertId+')', function(data) {
-                    sendOrderUpdate(data.insertId);
+                    sendOrderUpdate(insertId);
                 });
             });
         } else
