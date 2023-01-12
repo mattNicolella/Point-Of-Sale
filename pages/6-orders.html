@@ -6,10 +6,10 @@
             display:inline-block;
             background-color: blue;
         }*/
-        .categories {
+        /*.categories {
             height: 10%;
             max-height: 15vh;
-        }
+        }*/
 
         .grided {
             display: grid;
@@ -26,13 +26,24 @@
             display: none;
             border: 2px solid red;
         }
+
+        .actions {
+            position: absolute;
+            bottom: 2%;
+            left: 0%;
+            width:100%;
+        }
     </style>
 
     <input type="hidden" id="orderId" value="0">
 
     <div class="orderS">
         <h3 style="width: fit-content;" id="orderTitle" onClick="addOrder()">Order Id: + Add Order</h3>
+        <select class="openOrders" onChange="func(this);">
+            <option value="0">Open Orders</option>
+        </select>
     </div>
+
     <div class="row">
         <div class="order col-md-6">
             <ul>
@@ -41,22 +52,30 @@
 
         <div class="items col-md-6">
             <ul class="categories grided"></ul>
-            <ul class="itemGrid grided"><li>Second List</li></ul>
+            <ul class="itemGrid grided"></ul>
         </div>
     </div>
 
-    <div id="testdiv"></div>
+    <div class="actions">
+        <button>Discount</button>
+        <button onClick="send('cancelAll', $('#orderId').val());">Cancel All</button>
+        <button onClick="send('sendToMake', $('#orderId').val());">Send</button>
+        <button onClick="send('sendForPayment', $('#orderId').val());">Pay & Send</button>
+    </div>
 
     <script>
-        async function test() {
-            const cats = await window.api.call('getInfo', 'categories', '1erfdwef');
+        async function loadOrders() {
+            const cats = await window.api.call('getInfo', 'categories');
             $('.categories').html(cats);
 
-            const items = await window.api.call('getInfo', 'items', '1erfdwef');
+            const items = await window.api.call('getInfo', 'items');
             $('.itemGrid').html(items);
+
+            const openOrders = await window.api.call('getInfo', 'openOrders');
+            $('.openOrders').html('<option value="0">Open Orders</option>'+openOrders);
         }
 
-        test();
+        loadOrders();
 
         function showItems(idcat) {
             $('li', $('.itemGrid')).hide().length;
@@ -80,7 +99,16 @@
 
         window.api.receive("orderUpdate", (order) => {
             console.log('order update');
+            console.log(order);
             $('ul', '.order').html(order);
         });
+
+        async function func(elem) {
+            console.log('hello')
+            $('ul', '.order').html(await window.api.call('getInfo', 'order', elem.value));
+
+            $('#orderId').val(elem.value);
+            $('#orderTitle').html("Order Id: "+elem.value);
+        }
     </script>
 </div>

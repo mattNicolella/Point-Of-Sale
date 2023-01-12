@@ -5,6 +5,11 @@ body {
     padding: 0;
 }
 
+.container {
+    height: 100vh;
+    position: relative;
+}
+
 #main-content {
     float: right;
     width: 90%;

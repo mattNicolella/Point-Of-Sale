@@ -9,7 +9,7 @@ contextBridge.exposeInMainWorld(
     "api", {
         send: (channel, ...data) => {
             // whitelist channels
-            let validChannels = ["loadPages", "test1", "createOrder", 'updateOrder'];
+            let validChannels = ["loadPages", "test1", "createOrder", 'updateOrder', 'cancelAll', 'sendToMake','sendForPayment'];
             if (validChannels.includes(channel)) {
                 //console.log(data);
                 ipcRenderer.send(channel, ...data);
