@@ -9,21 +9,21 @@ contextBridge.exposeInMainWorld(
     "api", {
         send: (channel, ...data) => {
             // whitelist channels
-            let validChannels = ["loadPages", "test1"];
+            let validChannels = ["loadPages", "test1", "createOrder", 'updateOrder'];
             if (validChannels.includes(channel)) {
                 //console.log(data);
                 ipcRenderer.send(channel, ...data);
             }
         },
         receive: (channel, func) => {
-            let validChannels = ["sendPages", "loadComplete"];
+            let validChannels = ["sendPages", "loadComplete", "orderId", "orderUpdate"];
             if (validChannels.includes(channel)) {
                 // Deliberately strip event as it includes `sender` 
                 ipcRenderer.on(channel, (event, ...args) => func(...args));
             }
         },
         call: (channel, ...data) => {
-            let validChannels = ["getInfo", "addToOrder", "createOrder"];
+            let validChannels = ["getInfo", "addToOrder"];
             if (validChannels.includes(channel)) {
                 //console.log(data);
                 const output = ipcRenderer.invoke(channel, ...data);

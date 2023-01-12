@@ -4,6 +4,7 @@ const {
     ipcMain
 } = require("electron");
 require('dotenv').config();
+const {execSync} = require('child_process');
 const utils = require('./utils/functions.js');
 
 let win;
@@ -33,12 +34,19 @@ const createWindow = () => {
 };
 
 global.query = utils.query;
-global.triggerCloseDB = utils.debounce(() => utils.closeDB())
-  
+global.triggerCloseDB = utils.debounce(() => utils.closeDB());
+
+global.sendOrderUpdate = function(orderId) {
+    const output = execSync(`php ./php/order.php `+orderId).toString();
+    win.webContents.send('orderUpdate', output)
+};
+
+global.sendBackOrder = function(orderId) {
+    win.webContents.send('orderId', orderId)
+    console.log("Sending it back");
+};
 
 ipcMain.on("loadPages", (event, args) => {
-    //let responseObj = "hello";
-
     const files = fs.readdirSync(path.join(__dirname,'pages/'), {withFileTypes: true});
     
     for(const file of files) {
@@ -52,8 +60,6 @@ ipcMain.on("loadPages", (event, args) => {
     };
 
     win.webContents.send('loadComplete');
-    //fs.readFile("path/to/file", (error, data) => {
-    //});
 });
 
 app.whenReady().then(() => {
@@ -62,8 +68,6 @@ app.whenReady().then(() => {
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) createWindow()
     })
-
-     //ipcMain.handle('', handleFileOpen)
 });
 
 app.on('window-all-closed', () => {
@@ -71,8 +75,10 @@ app.on('window-all-closed', () => {
 });
 
 const functions = fs.readdirSync('./scripts').filter(file => file.endsWith('.js'));
-
 for (const func of functions) {
     const item = require(`./scripts/${func}`);
-    ipcMain.handle(item.name, (...args) => item.execute(...args));
+    if(typeof item.handle === 'undefined' || item.handle)
+        ipcMain.handle(item.name, (...args) => item.execute(...args));
+    else
+        ipcMain.on(item.name, (...args) => item.execute(...args));
 }

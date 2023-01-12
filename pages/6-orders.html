@@ -1,11 +1,11 @@
 <div class="container template" id="orders-template" data-tab="orders">
     <style>
-        .order, .items {
+        /*.order, .items {
             width: 45%;
             height:100%;
             display:inline-block;
-            /*background-color: blue;*/
-        }
+            background-color: blue;
+        }*/
         .categories {
             height: 10%;
             max-height: 15vh;
@@ -31,18 +31,18 @@
     <input type="hidden" id="orderId" value="0">
 
     <div class="orderS">
-        <h3 style="width: fit-content;">Order Status: </h3><a onClick="addOrder">+ Add Order</a>
+        <h3 style="width: fit-content;" id="orderTitle" onClick="addOrder()">Order Id: + Add Order</h3>
     </div>
+    <div class="row">
+        <div class="order col-md-6">
+            <ul>
+            </ul>
+        </div>
 
-    <div class="order">
-        <ul>
-            <li>hello</li>
-        </ul>
-    </div>
-
-    <div class="items">
-        <ul class="categories grided"></ul>
-        <ul class="itemGrid grided"><li>Second List</li></ul>
+        <div class="items col-md-6">
+            <ul class="categories grided"></ul>
+            <ul class="itemGrid grided"><li>Second List</li></ul>
+        </div>
     </div>
 
     <div id="testdiv"></div>
@@ -64,11 +64,23 @@
         }
 
         function addToOrder(idprod) {
-            window.api.call('addToOrder', idprod);
+            window.api.call('addToOrder', idprod, $('#orderId').val());
         }
 
         function addOrder() {
-            window.api.call('createOrder', '');
+            console.log("add order")
+            window.api.send('createOrder');
         }
+
+        window.api.receive("orderId", (orderId) => {
+            console.log('order id');
+            $('#orderId').val(orderId);
+            $('#orderTitle').html("Order Id: "+orderId);
+        });
+
+        window.api.receive("orderUpdate", (order) => {
+            console.log('order update');
+            $('ul', '.order').html(order);
+        });
     </script>
 </div>
