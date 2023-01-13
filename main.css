@@ -5,6 +5,10 @@ body {
     padding: 0;
 }
 
+* {
+    font-family: 'Ubuntu', sans-serif;
+}
+
 .container {
     height: 100vh;
     position: relative;
@@ -15,6 +19,10 @@ body {
     width: 90%;
     height: 100vh;
     background-color:#1e1e1e;
+}
+
+.input-group {
+    padding: 1%;
 }
 
 #side-bar {

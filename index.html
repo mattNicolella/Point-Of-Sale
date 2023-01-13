@@ -6,6 +6,9 @@
     <script src="https://kit.fontawesome.com/af333e4531.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css" />
     <script type="text/javascript" src="plugins/jquery-3.6.3.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     <!--<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">-->
@@ -23,7 +26,7 @@
             const $container = $('.container');
             //console.debug($container.data('tab'));
 
-            $('#side-bar-menu').append('<li>'+$container.data('tab')+'</li>');
+            $('#side-bar-menu').append('<li>'+ucCase($container.data('tab'))+'</li>');
             $('#main-content').append($('tmp').html());
 
             $('tmp').html('');
@@ -32,9 +35,9 @@
         $(document).on('click', '#side-bar-menu li', function() {
             $('#main-content > *').hide();
             $('#side-bar-menu li').removeClass('menuActive');
-            $('.container[data-tab=\''+$(this).addClass('menuActive').text()+'\']').show();
+            $('.container[data-tab=\''+$(this).addClass('menuActive').text().toLowerCase()+'\']').show();
         });
-        
+
         send('loadPages');
 
         function send(channel, ...args) {
@@ -52,6 +55,19 @@
                 returnArray[formArray[i]['name']] = formArray[i]['value'];
             }
             return returnArray;
+        }
+
+        function ucCase(str) {
+            let final=str.toLowerCase().split(' ');
+            //final.split(' ');
+            //console.log(final);
+
+            for(let i = 0; i < final.length; i++) {
+                final[i] = final[i][0].toUpperCase() + final[i].substring(1, final[i].length);
+            }
+
+            console.log(final)
+            return final.join(" ");
         }
     </script>
 </head>

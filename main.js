@@ -5,7 +5,8 @@ const {
 } = require("electron");
 require('dotenv').config();
 const {execSync} = require('child_process');
-const utils = require('./utils/functions.js');
+const utils = require('./utils/functions');
+const crypto = require('./utils/encryption')
 
 let win;
 const path = require("path");
@@ -21,7 +22,7 @@ const createWindow = () => {
     win = new BrowserWindow({
         width: width / 2,
         height: height / 2,
-        icon:'./favicon.png',
+        //icon:'./favicon.png',
         fullscreen: true,
         autoHideMenuBar: true,
         webPreferences: {
@@ -31,11 +32,12 @@ const createWindow = () => {
 
     win.loadFile(path.join(__dirname, 'index.html'));
     win.openDevTools();
-    //win.loadURL("https://google.com");
 };
 
 global.query = utils.query;
 global.triggerCloseDB = utils.debounce(() => utils.closeDB());
+global.encrypt = crypto.encrypt;
+global.decrypt = crypto.decrypt;
 
 global.sendOrderUpdate = function(orderId) {
     const output = execSync(`php ./php/order.php `+orderId).toString();
