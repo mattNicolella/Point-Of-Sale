@@ -21,6 +21,7 @@ const createWindow = () => {
     win = new BrowserWindow({
         width: width / 2,
         height: height / 2,
+        icon:'./favicon.png',
         fullscreen: true,
         autoHideMenuBar: true,
         webPreferences: {
@@ -29,7 +30,7 @@ const createWindow = () => {
     });
 
     win.loadFile(path.join(__dirname, 'index.html'));
-    //win.openDevTools();
+    win.openDevTools();
     //win.loadURL("https://google.com");
 };
 

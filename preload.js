@@ -23,7 +23,7 @@ contextBridge.exposeInMainWorld(
             }
         },
         call: (channel, ...data) => {
-            let validChannels = ["getInfo", "addToOrder"];
+            let validChannels = ["getInfo", "addToOrder", "formSubmit"];
             if (validChannels.includes(channel)) {
                 //console.log(data);
                 const output = ipcRenderer.invoke(channel, ...data);

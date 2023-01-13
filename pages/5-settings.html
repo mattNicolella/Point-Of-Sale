@@ -1,6 +1,115 @@
 <div class="container template" id="settings-template" data-tab="settings">
     <h1>Settings</h1>
-    We are using Node.js <span id="node-version"></span>,
-    Chromium <span id="chrome-version"></span>,
-    and Electron <span id="electron-version"></span>.
+
+    <style>
+        #settings-template section {
+            display:none;
+        }
+
+        #settings-template .tabs a {
+            color: white;
+            text-decoration: none;
+        }
+
+        #settings-template .tabs a:hover {
+            color: tan;
+            cursor: pointer;
+        }
+
+        #settings-template .tabs a.activeTab {
+            color: tan;
+        }
+
+        #settings-template .tabs, #settings-template section {
+            border-bottom: 1px solid #333333;
+            margin-bottom: 4%;
+        }
+    </style>
+    
+    <div class="tabs">
+        <script>
+            $(document).ready(function() {
+                let buttons = '';
+                $('section', '#settings-template').each(function() {
+                    buttons +='<a onClick="$(\'section\', \'#settings-template\').hide();$(\'#'+$(this).attr('id')+'\', \'#settings-template\').show();">'+$(this).data('text')+'</a>&nbsp;';
+                })
+
+                $('.tabs', '#settings-template').html(buttons);
+            })
+            .on('click', '#settings-template .tabs a', function() {
+                $('#settings-template .tabs a').removeClass('activeTab');
+                $(this).addClass('activeTab');
+            })
+        </script>
+    </div>
+
+    <form class="settings-form">
+        <input type=hidden id="settingsChanges" name="settingsChanges">
+
+        <section id="order-settings" data-text="Orders">
+            order section 
+        </section>
+
+        <section id="employee-settings" data-text="Employee Settings">
+            employee settings section
+        </section>
+
+        <section id="add-employee-settings" data-text="Add Employees">
+            add employee section
+
+            <div>
+                <label>First Name</label>
+                <input type="text" name="fname">
+            </div>
+
+            <div>
+                <label>Last Name</label>
+                <input type="text" name="lname">
+            </div>
+
+            <div>
+                <label>Password</label>
+                <input type="text" name="password" value="1234">
+            </div>
+        </section>
+
+        <section id="customer-settings" data-text="Customers">
+            customer section
+        </section>
+
+        <button>Submit</button>
+    </form>
+
+    <script>
+        $(document)
+            .on('submit', '.settings-form', function(e) {
+                console.log('form submitted');
+                const form = objectifyForm($(this).serializeArray());
+                console.log(form);
+                e.preventDefault();
+
+                invoke('formSubmit', 'settings', form);
+            })
+            /*.on('paste keyup', '.settings-form input', () => {settingsChange(this)})
+            .on('change', '.settings-form select', () => {settingsChange(this)})*/
+
+            .on('paste keyup', '.settings-form input', function() {settingsChange(this);})
+            //.on('change', '.settings-form select', () => {settingsChange(this)});
+
+        function settingsChange(elem) {
+            console.log($(elem))
+            console.log($(elem).closest('section'));
+
+            let temp = $('#settingsChanges').val();
+            const changeTabs = (temp ? temp.split(',') : []);
+
+            const curTab = $(elem).closest('section').attr('id');
+            console.log(curTab);
+            if(!changeTabs.includes(curTab)) {
+                changeTabs.push(curTab);
+            }
+
+            $('#settingsChanges').val(changeTabs.join(','));
+        }
+    </script>
 </div>

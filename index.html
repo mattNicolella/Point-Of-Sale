@@ -9,7 +9,7 @@
     <meta charset="UTF-8">
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     <!--<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">-->
-    <title>Hello World!</title>
+    <title>Schwarma Point Of Sale</title>
 
     <script>
         window.api.receive("loadCoimplete", () => {
@@ -35,14 +35,23 @@
             $('.container[data-tab=\''+$(this).addClass('menuActive').text()+'\']').show();
         });
         
-        window.api.send("loadPages", "data");
+        send('loadPages');
 
         function send(channel, ...args) {
             window.api.send(channel, ...args);
         }
 
-        async function invoke(channel, ...args) {
-            return await window.api.call(channel, ...args);
+        function invoke(channel, ...args) {
+            return window.api.call(channel, ...args);
+        }
+
+        function objectifyForm(formArray) {
+            //serialize data function
+            var returnArray = {};
+            for (var i = 0; i < formArray.length; i++){
+                returnArray[formArray[i]['name']] = formArray[i]['value'];
+            }
+            return returnArray;
         }
     </script>
 </head>
