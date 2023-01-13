@@ -2,8 +2,12 @@
     <h1>Settings</h1>
 
     <style>
-        #settings-template section {
+        #settings-template .section {
             display:none;
+        }
+
+        #settings-template section {
+            padding-bottom: 4%;
         }
 
         #settings-template .tabs a {
@@ -24,14 +28,29 @@
             border-bottom: 1px solid #333333;
             margin-bottom: 4%;
         }
+
+        #settings-template .tabs {
+            display: flex;
+            justify-content: center;
+        }
+
+        #settings-template .tabs a {
+            padding: 2%;
+        }
+
+        .settings-form .wrapper {
+            width: 70%;
+        }
     </style>
     
     <div class="tabs">
         <script>
             $(document).ready(function() {
                 let buttons = '';
-                $('section', '#settings-template').each(function() {
-                    buttons +='<a onClick="$(\'section\', \'#settings-template\').hide();$(\'#'+$(this).attr('id')+'\', \'#settings-template\').show();">'+$(this).data('text')+'</a>&nbsp;';
+                let i = 0;
+                $('.section', '.settings-form').each(function() {
+                    buttons +='<a onClick="$(\'.section\', \'.settings-form\').hide();$(\'.section\', \'.settings-form\').eq('+i+').show();">'+$(this).data('text')+'</a>&nbsp;';
+                    i++;
                 })
 
                 $('.tabs', '#settings-template').html(buttons);
@@ -46,36 +65,77 @@
     <form class="settings-form">
         <input type=hidden id="settingsChanges" name="settingsChanges">
 
-        <section id="order-settings" data-text="Orders">
-            order section 
-        </section>
+        <div class="section" data-text="Orders">
+            <section id="order-settings">
+                <h4>Order Settings</h4>
+            </section>
+        </div>
 
-        <section id="employee-settings" data-text="Employee Settings">
-            employee settings section
-        </section>
+        <div class="section" data-text="Products">
+            <section id="add-product-settings" data-text="Add Products">
+                <h3>Add A Product</h3>
 
-        <section id="add-employee-settings" data-text="Add Employees">
-            add employee section
+                <div class="wrapper">
+                    <div class="input-group row">
+                        <label class="col-md-6">Product Name</label>
+                        <input class="col-md-6" type="text" name="pname">
+                    </div>
 
-            <div>
-                <label>First Name</label>
-                <input type="text" name="fname">
-            </div>
+                    <div class="input-group row">
+                        <label class="col-md-6">Product Price</label>
+                        <input class="col-md-6" type="text" name="pprice">
+                    </div>
 
-            <div>
-                <label>Last Name</label>
-                <input type="text" name="lname">
-            </div>
+                    <div class="input-group row">
+                        <label class="col-md-6">Category</label>
+                        <select class="col-md-6" name="pcatsel"></select>
+                    </div>
+                </div>
+            </section>
 
-            <div>
-                <label>Password</label>
-                <input type="text" name="password" value="1234">
-            </div>
-        </section>
+            <section id="product-settings" data-text="Edit Products">
+                <h3>Edit Products</h3>
+            </section>
+        </div>
 
-        <section id="customer-settings" data-text="Customers">
-            customer section
-        </section>
+        <div class="section" data-text="Categories">
+            <section id="category-settings" data-text="Categories">
+                <h3>Categories</h3>
+            </section>
+        </div>
+
+        <div class="section" data-text="Employees">
+            <section id="add-employee-settings" data-text="Add Employees">
+                <h3>Add Employee</h3>
+
+                <div class="wrapper">
+                    <div class="input-group row">
+                        <label class="col-md-6">First Name</label>
+                        <input class="col-md-6" type="text" name="fname">
+                    </div>
+
+                    <div class="input-group row">
+                        <label class="col-md-6">Last Name</label>
+                        <input class="col-md-6" type="text" name="lname">
+                    </div>
+
+                    <div class="input-group row">
+                        <label class="col-md-6" >Password</label>
+                        <input class="col-md-6" type="text" name="password" value="1234">
+                    </div>
+                </div>
+            </section>
+
+            <section id="employee-settings" data-text="Employee Settings">
+                <h3>Employee Settings</h3>
+            </section>
+        </div>
+
+        <div class="section" data-text="Customers">
+            <section id="customer-settings">
+                customer section
+            </section>
+        </div>
 
         <button>Submit</button>
     </form>
@@ -83,28 +143,23 @@
     <script>
         $(document)
             .on('submit', '.settings-form', function(e) {
-                console.log('form submitted');
+                //console.log('form submitted');
                 const form = objectifyForm($(this).serializeArray());
-                console.log(form);
+                //console.log(form);
                 e.preventDefault();
 
                 invoke('formSubmit', 'settings', form);
             })
-            /*.on('paste keyup', '.settings-form input', () => {settingsChange(this)})
-            .on('change', '.settings-form select', () => {settingsChange(this)})*/
 
             .on('paste keyup', '.settings-form input', function() {settingsChange(this);})
-            //.on('change', '.settings-form select', () => {settingsChange(this)});
+            .on('change', '.settings-form select', function() {settingsChange(this)});
 
         function settingsChange(elem) {
-            console.log($(elem))
-            console.log($(elem).closest('section'));
 
             let temp = $('#settingsChanges').val();
             const changeTabs = (temp ? temp.split(',') : []);
 
             const curTab = $(elem).closest('section').attr('id');
-            console.log(curTab);
             if(!changeTabs.includes(curTab)) {
                 changeTabs.push(curTab);
             }
